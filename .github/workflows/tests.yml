@@ -19,7 +19,11 @@ jobs:
           persist-credentials: false
 
       - name: Tap this checkout
-        run: brew tap anullog/tap "$GITHUB_WORKSPACE"
+        # Homebrew loads formulae from third-party taps only once they are trusted
+        # (`brew install` asks; CI has to say so)
+        run: |
+          brew tap anullog/tap "$GITHUB_WORKSPACE"
+          brew trust anullog/tap
 
       - name: Audit
         run: brew audit --strict --online anullog/tap/photosync
