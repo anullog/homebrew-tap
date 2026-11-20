@@ -1,0 +1,31 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  formula:
+    runs-on: macos-latest
+    timeout-minutes: 15
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: 1
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Tap this checkout
+        run: brew tap anullog/tap "$GITHUB_WORKSPACE"
+
+      - name: Audit
+        run: brew audit --strict --online anullog/tap/photosync
+
+      - name: Install and test
+        run: |
+          brew install anullog/tap/photosync
+          brew test anullog/tap/photosync
+          photosync --version
