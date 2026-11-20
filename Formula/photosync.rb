@@ -28,6 +28,7 @@ class Photosync < Formula
     assert_equal "photo", (testpath/"ssd/DCIM/A.ARW").read
 
     # nothing is replaced without an answer typed on a terminal
+    rm testpath/"card/DCIM/A.ARW" # Pathname#write in Homebrew refuses to overwrite
     (testpath/"card/DCIM/A.ARW").write "another photo"
     shell_output("#{bin}/photosync copy #{testpath}/card #{testpath}/ssd </dev/null 2>&1", 1)
     assert_equal "photo", (testpath/"ssd/DCIM/A.ARW").read
